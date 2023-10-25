@@ -2,21 +2,64 @@
 
 namespace App\Http\Controllers;
 use App\Models\Product;
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;        [Part-2]
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 
 
 
-class ProductController extends Controller
+class ProductController extends Controller  
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() //Request $request [Part-2] no need
     {
-        return Product::all();
+        // return Product::orderBy('id', 'desc')->paginate(5);
+
+    /* ----------------------------------------------------------------------------------------------------- */
+                                                                                            //[ Part-1 ]
+
+        // if($request->search) {
+        //     return Product::where('name', 'like', '%' . $request->search . '%')
+        //     ->orderBy('id', 'desc')->paginate(5);
+        // } else {
+        //     return Product::orderBy('id', 'desc')->paginate(5);
+        // }
+
+    /* ------------------------------------------------------------------------------------------------------ */
+                                                                                                //[ Part-2 ]
+
+        // if(request('search')) {
+        //     return Product::where('name', 'like', '%' . request('search') . '%')
+        //     ->orderBy('id', 'desc')->paginate(5);
+        // } else {
+        //     return Product::orderBy('id', 'desc')->paginate(5);
+        // }
+
+    /* ------------------------------------------------------------------------------------------------------ */
+                                                                                                //[Part-3] Part2 short-form
+
+        // $products = Product::query();
+        // if(request('search')) {
+        //     return $products->where('name', 'like', '%' . request('search') . '%')
+        //     ->orderBy('id', 'desc')->paginate(5);
+        // } else {
+        //     return $products->orderBy('id', 'desc')->paginate(5);
+        // }
+
+    /* ---------------------------------------------------------------------------------------------------------- */
+                                                                                                //[Part-4] Part3 short form [1 line]
+
+        return Product::when(request('search'), function($query){
+            $query->where('name', 'like', '%' . request('search') . '%');
+        })->orderBy('id', 'desc')->paginate(5);
+
+
+
+
+
     }
 
     /**

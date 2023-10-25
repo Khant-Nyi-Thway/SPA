@@ -6,13 +6,46 @@
 
 import './bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.js';
 import { createApp } from 'vue';
+
+import Swal from 'sweetalert2'
+import Form from 'vform'
+import Loading from 'vue-loading-overlay';
+
+
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
  * to use in your application's views. An example is included for you.
  */
+
+window.Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  })
+  
+//   Toast.fire({
+//     icon: 'success',
+//     title: 'Signed in successfully'
+//   })
+  
+
+
+window.Form = Form;
+window.Swal = Swal;
+
+
+
+// window.Toast = Toast;
 
 const app = createApp({});
 
@@ -22,6 +55,53 @@ app.component('example-component', ExampleComponent);
 
 import ProductComponent from './components/ProductComponent.vue';
 app.component('product-component', ProductComponent);
+
+// Import and register vform components once
+ import { Button, HasError, AlertError, AlertSuccess } from 'vform/src/components/bootstrap5';
+
+
+
+  
+app.component(Button.name, Button)
+app.component(HasError.name, HasError)
+app.component(AlertError.name, AlertError)
+app.component(AlertSuccess.name, AlertSuccess)
+
+
+
+import VueProgressBar from "@aacassandra/vue3-progressbar";
+window.options = {
+    color: "blue",
+    failedColor: "red",
+    thickness: "4px",
+    transition: {
+      speed: "0.2s",
+      opacity: "0.6s",
+      termination: 400,
+    },
+    autoRevert: true,
+    location: "top",
+    inverse: false,
+  };
+  app.use(VueProgressBar, options)
+
+
+//   Loading
+
+
+import {LoadingPlugin} from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
+// window.LoadingPlugin = LoadingPlugin;
+app.use(LoadingPlugin, {
+  color: 'blue',
+  width: '90px',
+  height: '45px',
+  loader: 'dots',
+  failedColor: 'red',
+  
+});
+
+
 
 
 /**
